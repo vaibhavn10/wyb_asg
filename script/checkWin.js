@@ -1,3 +1,4 @@
+// Function to check if anyone won the game.
 export function checkWin(n, cellElements, currentClass) {
   const cells = [...cellElements];
   console.log();
