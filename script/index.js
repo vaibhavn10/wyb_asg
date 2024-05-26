@@ -47,9 +47,17 @@ const removeCells = () => {
 };
 
 function createBoard() {
-  oTurn = false;
+  oTurn = false;  
+  n = document.getElementById("ngrids").value || 3;
+  m = document.getElementById("win-streak").value || 3;
   document.getElementById("next").innerHTML = "NEXT GAME";
   document.getElementById("next").addEventListener("click", next);
+  if (m > n) {
+    document.getElementById("msg").innerHTML =
+      "Win streak must be less than Number of grids.";
+  } else {
+    document.getElementById("msg").innerHTML = `No. of wins needed: ${m}`;
+  }
   board.style.gridTemplateColumns = `repeat(${n}, ${100 / n}%)`;
 
   removeCells();
