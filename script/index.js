@@ -17,14 +17,12 @@ const initBoard = () => {
   n = document.getElementById("ngrids").value || 3; //taking the input (default value is 3)
   m = document.getElementById("win-streak").value || 3; //taking the input (default value is 3)
   // adding event listeners to the buttons
-  document
-    .getElementById("createBoard")
-    .addEventListener("click", createBoard); // After clicking on button with createBoard id a new board will be created
+  document.getElementById("createBoard").addEventListener("click", createBoard); // After clicking on button with createBoard id a new board will be created
   document.getElementById("next").addEventListener("click", next); // After clicking on button with next a new game will be started
   if (m > n) {
     // win streak must be less than or equal to grid size.
     document.getElementById("msg").innerHTML =
-    "Win streak must be less than Number of grids.";
+      "Win streak must be less than Number of grids.";
   } else {
     document.getElementById("msg").innerHTML = `No. of wins needed: ${m}`;
   }
@@ -53,10 +51,10 @@ const removeCells = () => {
 // function to create a new board
 function createBoard() {
   oTurn = false; // X to be placed first
-  n = document.getElementById("ngrids").value || 3;  //Taking new inputs or creating new board  
-  m = document.getElementById("win-streak").value || 3;  //Taking new inputs or creating new board  
+  n = document.getElementById("ngrids").value || 3; //Taking new inputs or creating new board
+  m = document.getElementById("win-streak").value || 3; //Taking new inputs or creating new board
   document.getElementById("next").innerHTML = "NEXT GAME";
-  document.getElementById("next").addEventListener("click", next); 
+  document.getElementById("next").addEventListener("click", next);
 
   //win streak must be less than or equal to grid size
   if (m > n) {
@@ -67,7 +65,7 @@ function createBoard() {
   }
   board.style.gridTemplateColumns = `repeat(${n}, ${100 / n}%)`;
 
-  // removing all the cells 
+  // removing all the cells
   removeCells();
 
   //creating new cells and adding them to the board
@@ -138,14 +136,16 @@ function placeMark(cell, currentClass) {
 function endGame(draw) {
   // This function is executed if all cells are marked or some one won the game. firstly it checks if the game is draw or not, if not then it checks if the streak is broken by any player or not, if not it checks who is the winner and name is displayed  and the score is updated. then current player who is going to start first in the next game is swapped and is given x mark first.
   if (draw) {
+    sessionStorage.setItem("player1", 0);
+    sessionStorage.setItem("player2", 0);
     gameMsg.innerText = "Draw!";
   } else {
     const complete = checkStreak();
-    if(!complete){
+    if (!complete) {
       if (oTurn) {
         gameMsg.innerText = `${
           currentPlayer === "p1" ? "p2" : "p1"
-        } wins the game`;
+        } wins the game. ${currentPlayer} will play first.`;
         currentPlayer === "p1"
           ? sessionStorage.setItem(
               "player2",
@@ -156,7 +156,9 @@ function endGame(draw) {
               parseInt(sessionStorage.getItem("player1")) + 1
             );
       } else {
-        gameMsg.innerText = `${currentPlayer} wins the game`;
+        gameMsg.innerText = `${currentPlayer} wins the game. ${
+          currentPlayer === "p1" ? "p2" : "p1"
+        } will play first.`;
         currentPlayer === "p1"
           ? sessionStorage.setItem(
               "player1",
@@ -167,14 +169,15 @@ function endGame(draw) {
               parseInt(sessionStorage.getItem("player2")) + 1
             );
       }
-    }
-    else{
+    } else {
       //after the streak is broken players score is reset and game is reloaded after displaying who broke the streak first
-      sessionStorage.setItem("player1",0)
-      sessionStorage.setItem("player2",0)
-      document.getElementById("next").addEventListener("click", ()=>{window.location.reload()});
+      sessionStorage.setItem("player1", 0);
+      sessionStorage.setItem("player2", 0);
+      document.getElementById("next").addEventListener("click", () => {
+        window.location.reload();
+      });
       document.getElementById("next").innerHTML = "Restart the game";
-      console.log("Game ENDED!")
+      console.log("Game ENDED!");
     }
     setPlayer();
   }
@@ -196,16 +199,14 @@ function next() {
 
 // function to check if some one broke the streak or not
 function checkStreak() {
-  if(parseInt(sessionStorage.getItem("player1"))===m-1){
+  if (parseInt(sessionStorage.getItem("player1")) === m - 1) {
     gameMsg.innerText = `Player1 ends the streak.`;
     return true;
-  }
-  else if(parseInt(sessionStorage.getItem("player2"))===m-1){
+  } else if (parseInt(sessionStorage.getItem("player2")) === m - 1) {
     gameMsg.innerText = `Player2 ends the streak.`;
     return true;
-  }
-  else{
-    return false
+  } else {
+    return false;
   }
 }
 // function to set current player who is going to start first
@@ -214,4 +215,4 @@ function setPlayer() {
 }
 
 //starting the game
-  startGame();
+startGame();
